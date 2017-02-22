@@ -32,6 +32,7 @@ class TestConfigParser(unittest.TestCase):
         cfg = ConfigParser()
 
         result_dict = cfg.parse(arguments)
+        print("result_dict: %s" % result_dict)
         value = result_dict.get(key)
 
         eq_(value, expected)
@@ -66,6 +67,7 @@ class TestConfigParser(unittest.TestCase):
         cfg = ConfigParser()
 
         result_dict = cfg.parse(arguments)
+        print("result dict: %s" % result_dict)
         value = result_dict.get(key)
 
         eq_(value, expected)
