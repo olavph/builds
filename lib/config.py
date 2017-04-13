@@ -29,6 +29,9 @@ BUILD_REPO_ARGS = {
         dict(help='Packages metadata git repository URL'),
     ('--packages-metadata-repo-branch',):
         dict(help='Packages metadata git repository branch'),
+    ('--packages-metadata-repo-ref-specs',):
+        dict(help='Packages metadata git repository ref specs to fetch',
+             nargs='*'),
     ('--http-proxy',):
         dict(help='HTTP proxy URL'),
 }

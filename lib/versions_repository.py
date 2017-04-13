@@ -48,8 +48,9 @@ def setup_versions_repository(config):
     """
     versions_repo = get_versions_repository(config)
     branch = config.get('common').get('packages_metadata_repo_branch')
+    ref_specs = config.get('common').get('packages_metadata_repo_ref_specs')
     try:
-        versions_repo.checkout(branch)
+        versions_repo.checkout(branch, ref_specs)
     except exception.RepositoryError:
         LOG.error("Failed to checkout versions repository")
         raise

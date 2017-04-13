@@ -129,15 +129,23 @@ class GitRepository(git.Repo):
     def name(self):
         return os.path.basename(self.working_tree_dir)
 
-    def checkout(self, ref_name):
+    def checkout(self, ref_name, ref_specs=None):
         """
         Check out the reference name, resetting the index state.
         The reference may be a branch, tag or commit.
+
+        Args:
+            ref_name (str): name of the reference. May be a branch, tag,
+                commit ID, etc.
+            ref_specs ([str]): pattern mappings from remote references to
+                local references, as specified by Git.
         """
         LOG.info("%(name)s: Fetching repository remote %(remote)s"
                  % dict(name=self.name, remote=MAIN_REMOTE_NAME))
+        if ref_specs is not None:
+            LOG.debug("Using custom ref specs %s" % ref_specs)
         main_remote = self.remote(MAIN_REMOTE_NAME)
-        main_remote.fetch()
+        main_remote.fetch(ref_specs)
 
         commit_id = self._get_reference(ref_name)
         LOG.info("%(name)s: Checking out reference %(ref)s pointing to commit "
