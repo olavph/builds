@@ -71,7 +71,7 @@ host_os:
   distro_name: CentOS
   distro_version: '7'
   http_proxy: ''
-  log_size: 2097152
+  log_size: 41943040
   verbose: false
   work_dir: workspace
 update-metapackage:

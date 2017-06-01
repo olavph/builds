@@ -81,7 +81,7 @@ options:
     action: store_true
   log_size:
     help: Size in bytes above which the log file should rotate
-    default: 2097152
+    default: 41943040
   mock_args:
     help: Arguments passed to mock command
     # If the system has less RAM than required, the plugin will be disabled
