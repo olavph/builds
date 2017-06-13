@@ -14,6 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
+import fcntl
 import logging
 import os
 
@@ -74,11 +75,27 @@ class MockPungiIsoBuilder(object):
 
     def _setup(self):
         LOG.info("Initializing a chroot")
-        self.mock.initialize()
+        LOCK_FILE_NAME = "mock.lock"
+        LOCK_FILE_PATH = os.path.join(self.config.get('work_dir'), LOCK_FILE_NAME)
+        lock_file = open(LOCK_FILE_PATH, "w")
+        try:
+            fcntl.lockf(lock_file, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except IOError as exc:
+            RESOURCE_UNAVAILABLE_ERROR = 11
+            if exc.errno == RESOURCE_UNAVAILABLE_ERROR:
+                LOG.info("Waiting for another process to finish chroot "
+                         "initialization")
+            else:
+                raise
+        fcntl.lockf(lock_file, fcntl.LOCK_EX)
+        self.mock.run_command("--scrub all")
+        self.mock.run_command("--init")
 
         package_list = ["createrepo", "pungi"]
         LOG.info("Installing %s inside the chroot" % " ".join(package_list))
         self.mock.run_command("--install %s" % " ".join(package_list))
+        fcntl.lockf(lock_file, fcntl.LOCK_UN)
+        lock_file.close()
 
         self._create_iso_repo()
 

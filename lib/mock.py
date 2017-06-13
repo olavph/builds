@@ -14,12 +14,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import fcntl
+import logging
 import os
 
 from lib import config
 from lib import utils
 
 CONF = config.get_config().CONF
+LOG = logging.getLogger(__name__)
 
 LOCK_FILE_NAME = "mock.lock"
 LOCK_FILE_PATH = os.path.join(CONF.get('work_dir'), LOCK_FILE_NAME)
@@ -62,7 +64,17 @@ class Mock(object):
         This method is thread safe.
         """
         lock_file = open(LOCK_FILE_PATH, "w")
+        try:
+            fcntl.lockf(lock_file, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except IOError as exc:
+            RESOURCE_UNAVAILABLE_ERROR = 11
+            if exc.errno == RESOURCE_UNAVAILABLE_ERROR:
+                LOG.info("Waiting for another process to finish chroot "
+                         "initialization")
+            else:
+                raise
         fcntl.lockf(lock_file, fcntl.LOCK_EX)
         self.run_command("--scrub all")
         self.run_command("--init")
         fcntl.lockf(lock_file, fcntl.LOCK_UN)
+        lock_file.close()
