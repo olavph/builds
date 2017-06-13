@@ -55,7 +55,6 @@ class MockPackageBuilder(package_builder.PackageBuilder):
         self.archive = None
         self.timestamp = datetime.datetime.now().isoformat()
         self.mock = Mock(config_file, self.timestamp)
-        self.mock.run_command("--scrub all")
 
     def initialize(self):
         """
@@ -63,7 +62,7 @@ class MockPackageBuilder(package_builder.PackageBuilder):
         packages. This setup is common for all packages that are built
         and needs to be done only once.
         """
-        self.mock.run_command("--init")
+        self.mock.initialize()
 
     def build(self, package):
         """

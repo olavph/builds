@@ -65,7 +65,6 @@ class MockPungiIsoBuilder(object):
                 "Mock config file not found at %s" % mock_config_file_path)
 
         self.mock = Mock(mock_config_file_path, self.timestamp)
-        self.mock.run_command("--scrub all")
 
     def build(self):
         LOG.info("Starting ISO build process")
@@ -75,7 +74,7 @@ class MockPungiIsoBuilder(object):
 
     def _setup(self):
         LOG.info("Initializing a chroot")
-        self.mock.run_command("--init")
+        self.mock.initialize()
 
         package_list = ["createrepo", "pungi"]
         LOG.info("Installing %s inside the chroot" % " ".join(package_list))
