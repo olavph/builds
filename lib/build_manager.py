@@ -78,7 +78,6 @@ class BuildManager(object):
 
         package_builder.create_repository()
         package_builder.create_latest_symlink_result_dir()
-        package_builder.clean()
 
     def build(self):
         """

@@ -48,7 +48,8 @@ class MockPungiIsoBuilder(object):
 
     def _init_mock(self):
         """
-        Initialize Mock instance with common mock arguments.
+        Initialize Mock instance with common mock arguments and clean
+        mock caches.
         """
         distro = distro_utils.get_distro(
             self.config.get('distro_name'),
@@ -64,6 +65,7 @@ class MockPungiIsoBuilder(object):
                 "Mock config file not found at %s" % mock_config_file_path)
 
         self.mock = Mock(mock_config_file_path, self.timestamp)
+        self.mock.run_command("--scrub all")
 
     def build(self):
         LOG.info("Starting ISO build process")
@@ -166,6 +168,3 @@ class MockPungiIsoBuilder(object):
         LOG.info("Saving ISO files %s at %s" % (iso_files, self.result_dir))
         self.mock.run_command("--copyout %s %s" %
                               (iso_files, self.result_dir))
-
-    def clean(self):
-        self.mock.run_command("--clean")

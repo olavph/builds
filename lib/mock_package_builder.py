@@ -55,6 +55,7 @@ class MockPackageBuilder(package_builder.PackageBuilder):
         self.archive = None
         self.timestamp = datetime.datetime.now().isoformat()
         self.mock = Mock(config_file, self.timestamp)
+        self.mock.run_command("--scrub all")
 
     def initialize(self):
         """
@@ -173,12 +174,6 @@ class MockPackageBuilder(package_builder.PackageBuilder):
             file_path = os.path.join(package.build_files, f)
             LOG.info("copying %s to %s" % (file_path, self.archive))
             shutil.copy(file_path, self.archive)
-
-    def clean(self):
-        """
-        Clean build environment
-        """
-        self.mock.run_command("--clean")
 
     def clean_cache_dir(self, package):
         """

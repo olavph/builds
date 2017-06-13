@@ -24,9 +24,3 @@ class PackageBuilder(object):
         This is where all the action really happens, rpm or deb classes have
         to implement this with their respective build steps
         """
-
-    @abc.abstractmethod
-    def clean(self):
-        """
-        clean up steps.
-        """
