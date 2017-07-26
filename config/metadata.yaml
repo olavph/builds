@@ -20,8 +20,8 @@ options:
       url_type: baseurl
       url: http://mirror.centos.org/altarch/7/os/ppc64le/
     - name: epel
-      url_type: baseurl
-      url: http://mirror.utexas.edu/epel/7/ppc64le/
+      url_type: mirrorlist
+      url: https://mirrors.fedoraproject.org/mirrorlist?repo=epel-7&arch=ppc64le
     - name: extras
       url_type: baseurl
       url: http://mirror.centos.org/altarch/7/extras/ppc64le/
